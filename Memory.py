@@ -189,7 +189,6 @@ class Job:
         self.startLoc = startLoc
         self.endLoc = startLoc + size
 
-"""
 # TESTING AREA, JUST PRINTING TO SEE IF THERES BUGS
 Machine = SUC(15)
 Machine.newJob("one", 5)
@@ -233,4 +232,3 @@ print(Machine3.memory)
 print()
 #Machine = Memory(int(input("How much memory is available: ")))
 #print()
-"""
