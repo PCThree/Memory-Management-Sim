@@ -1,7 +1,3 @@
-# Pasta ahead
-# TODO:
-# implement error handling
-# implement dynamic partitions
 
 class Partition:
     def __init__(self, maxSize, index):
@@ -15,8 +11,6 @@ class Partition:
         self.jobCounter = 0
         self.index = index
 
-    # The original gapcheck algorithm, found a more simpler approach
-    # Welp, cant make that work, imma stick with this
     def gapCheck(self):
         self.gaps.clear()
         counter = 0
@@ -46,9 +40,7 @@ class Partition:
                 for i in range(size):
                     del self.memory[gap[0]]
                 self.memory.insert(gap[0],[False for i in range(size)])
-                #print(self.memory)
                 self.gapCheck()
-                #print(self.gaps)
                 return
         print("ERROR: No space available")
         input("press ENTER to continue")
@@ -60,7 +52,6 @@ class Partition:
                 self.objects.sort(key=lambda x: x.startLoc, reverse=False)
                 for i in range(gap[0],gap[0]+jobSize):
                     self.memory[i] = True
-                #print(self.memory)
                 self.gapCheck()
                 self.jobCounter += 1
                 return
@@ -106,7 +97,6 @@ class FP(Partition): # Fixed Partition
     def __init__(self, partSizes):
         super().__init__(sum(partSizes), None)
         self.type = "Fixed Partition"
-        # I don't exactly know how a computer assigns partition size
         for size in partSizes:
             self.newPartition(size)
     
@@ -119,7 +109,6 @@ class FP(Partition): # Fixed Partition
                     for i in range(gap[0],gap[0]+size):
                         self.objects[p].memory[i] = True
                         self.memory[p][i] = True
-                    #print(self.memory)
                     self.objects[p].gapCheck()
                     self.objects[p].jobCounter += 1
                     return
@@ -127,7 +116,6 @@ class FP(Partition): # Fixed Partition
         input("press ENTER to continue")
 
     def printJobs(self):
-        #print(self.gaps)
         print("\nJOB LIST:")
         print("INDEX\tPARTITION\tSIZE\tLOCATION")
         counter = 0
@@ -149,12 +137,6 @@ class FP(Partition): # Fixed Partition
                     self.objects[p].gapCheck()
                     return
                 counter += 1
-
-
-        for i in range(self.objects[index].startLoc, self.objects[index].endLoc):
-            self.memory[i] = False
-        del self.objects[index]
-        self.gapCheck()
 
 class DP(Partition): # Dynamic Partition
     def __init__(self, maxSize):
