@@ -136,6 +136,7 @@ class DP(Partition): # Dynamic Partition
                 self.gapCheck()
                 return
         print("ERROR: No space available")
+        input("Press ENTER to continue")
     
     def delPartition(self, index):
         tmp = 0 # Accounting for the extra "False" values added in self.memory
