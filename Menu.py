@@ -1,12 +1,12 @@
 import Memory
-takenSymbol = "X"
-freeSymbol = "O"
+takenSymbol = "|"
+freeSymbol = "-"
 upperBoundMemory = 50
 lowerBoundMemory = 1
 
 def MainMenu():
     while True:
-        print("Welcome to the Memory Management SIM")
+        print("\nWelcome to the Memory Management SIM:")
         print("[1] Single User Contiguous Memory")
         print("[2] Fixed Partition")
         print("[3] Dynamic Partition")
@@ -34,29 +34,44 @@ def MainMenu():
 def SUCmem():
     while True:
         try: 
-            maxMem = int(input("How much memory do you want the machine to have: [1-50] "))
+            print("How much memory do you want the machine to have: [1-50] [C/c to cancel]")
+            maxMem = input("> ")
+            if maxMem.lower() == "c":
+                return
+            maxMem = int(maxMem)
             if maxMem < lowerBoundMemory or maxMem > upperBoundMemory:
-                raise TypeError
+                raise ValueError
             Machine = Memory.SUC(maxMem)
+            jobCounter = 0
             break
-        except TypeError:
-            print("ERROR: Please input a valid integer")
+        except ValueError:
+            print("ERROR: Please input a valid choice")
     
     while True:
         print()
-        displayMemory(Machine)
-        print("[1] Add job")
-        print("[2] Delete job")
+        Machine.printMemory(freeSymbol,takenSymbol)
+        Machine.printJobs()
+        print("\n[1] Add job")
+        print("[2] Deallocate job")
+        print("[3] EXIT")
 
         option = "0"
-        optionChoices = ["1","2"]
+        optionChoices = ["1","2","3"]
         while option not in optionChoices:
-            option = input("Choose an option: ")
+            print("Choose an option")
+            option = input("> ")
             if option not in optionChoices:
                 print("ERROR: Please pick a valid option")
-                continue
         
-
+        if option == "1":
+            addJob(Machine)
+        elif option == "2":
+            if len(Machine.objects) == 0:
+                print("ERROR: No jobs to deallocate")
+            else:
+                deleteJob(Machine)
+        elif option == "3":
+            return
 
 def FPmem():
     pass
@@ -67,22 +82,30 @@ def DPmem():
 def RDPmem():
     pass
 
-def displayMemory(mach):
-    print("[ ", end="")
-    for val in mach.memory:
-        if val is False:
-            print(freeSymbol, end="")
-        elif val is True:
-            print(takenSymbol, end="")
-        else:
-            for val2 in val:
-                if val is False:
-                    print(freeSymbol, end="")
-                elif val is True:
-                    print(takenSymbol, end="")
-    print(" ]")
+def addJob(mach):
+    jobSize = 0
+    while jobSize <= 0:
+        print("How big is the job: [C/c to cancel]")
+        jobSize = input("> ")
+        if jobSize.lower() == "c":
+            return
+        jobSize = int(jobSize)
+        mach.newJob(mach.jobCounter,jobSize)
 
-def deleteJob():
-    pass
-
+def deleteJob(mach):
+    objOption = "-1"
+    objOptions = []
+    for i in range(len(mach.objects)):
+        objOptions.append(str(i))
+    #print(objOptions)
+    while objOption not in objOptions:
+        print(f"Which object to delete: [0-{len(mach.objects)-1}] [C/c to cancel]")
+        objOption = input("> ")
+        if objOption not in objOptions:
+            print("ERROR: Please input a valid option")
+        elif objOption.lower() == "c":
+            return
+    objOption = int(objOption)
+    mach.delJob(objOption)
+        
 MainMenu()
