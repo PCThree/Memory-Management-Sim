@@ -15,22 +15,6 @@ class Partition:
         self.jobCounter = 0
         self.index = index
 
-    """ Broke. alternative way of checking gaps
-    def gapCheck(self):
-        self.gaps.clear()
-        if len(self.objects) == 0:
-            self.gaps.append([0,len(self.objects) - 1])
-            return
-        for i in range(len(self.objects)):
-            if self.objects[-1].endLoc == self.maxSize:
-                return
-            elif i == len(self.objects) - 1:
-                self.gaps.append([self.objects[i].endLoc + 1,len(self.objects)-1])
-            elif self.objects[i][1] - self.objects[i+1][0] != 1 :
-                self.gaps.append([self.objects[i].endLoc + 1,self.objects[i+1].startLoc - 1])
-    """
-                
-
     # The original gapcheck algorithm, found a more simpler approach
     # Welp, cant make that work, imma stick with this
     def gapCheck(self):
@@ -127,15 +111,6 @@ class FP(Partition): # Fixed Partition
         self.newPartition(int(self.maxSize*0.20))
         self.newPartition(self.maxSize - (int(self.maxSize*0.40) + int(self.maxSize*0.15) + int(self.maxSize*0.20) + int(self.maxSize*0.20))) # Had to workaround for the decimal values disposed during integer conversion
 
-        """ DEPRECIATED
-        self.objects.append(Partition(int(self.maxSize*0.40)))
-        self.objects.append(Partition(int(self.maxSize*0.15)))
-        self.objects.append(Partition(int(self.maxSize*0.20)))
-        self.objects.append(Partition(int(self.maxSize*0.20)))
-        # Had to workaround for the decimal values disposed during integer conversion
-        self.objects.append(Partition(self.maxSize - (int(self.maxSize*0.40) + int(self.maxSize*0.15) + int(self.maxSize*0.20) + int(self.maxSize*0.20))))
-        """
-
         self.sum = 0
         for obj in self.objects:
             self.sum += obj.maxSize
@@ -191,19 +166,6 @@ class RDP(DP): # Relocatable Dynamic Partition
                     self.gapCheck()
                     return
         self.gapCheck()
-    """
-    def reallocate(self):
-        if len(self.gaps) == 0:
-            return
-        firstEmpty = self.gaps[0][0]
-        for i in range( self.gaps[0][1] + 1,len(self.memory)):
-            if self.memory[i] is not False:
-                self.memory[i].index = firstEmpty
-                self.memory.insert(firstEmpty, self.memory.pop(i))
-                firstEmpty += 1
-                i = firstEmpty
-        self.gapCheck()
-    """
 
 class Job:
     def __init__(self, name, size, startLoc):
@@ -212,49 +174,3 @@ class Job:
         self.size = size
         self.startLoc = startLoc
         self.endLoc = startLoc + size
-
-"""
-# TESTING AREA, JUST PRINTING TO SEE IF THERES BUGS
-Machine = SUC(15)
-Machine.newJob("one", 5)
-print(Machine.memory)
-print(Machine.gaps)
-Machine.newJob("two", 2)
-print(Machine.memory)
-print(Machine.gaps)
-for obj in Machine.objects:
-    print(obj.name)
-Machine.delJob(0)
-print(Machine.memory)
-print(Machine.gaps)
-Machine2 = FP(10)
-print(Machine2.memory)
-Machine3 = RDP(15)
-print("---Machine 3---")
-print(Machine3.memory)
-Machine3.newPartition(5, "DPMac")
-Machine3.newPartition(2, "DPMac")
-Machine3.newPartition(3, "DPMac")
-Machine3.newPartition(4, "DPMac")
-Machine3.newPartition(1, "DPMac")
-Machine3.newPartition(2, "DPMac")
-print(Machine3.memory)
-Machine3.delPartition(1)
-print(Machine3.memory)
-print(Machine3.gaps)
-print(Machine3.objects)
-Machine3.reallocate()
-print(Machine3.memory)
-print(Machine3.gaps)
-print("CHECKPOINT")
-Machine3.delPartition(0)
-print(Machine3.gaps)
-print(Machine3.memory)
-Machine3.reallocate()
-print(Machine3.objects)
-print(Machine3.gaps)
-print(Machine3.memory)
-print()
-#Machine = Memory(int(input("How much memory is available: ")))
-#print()
-"""
