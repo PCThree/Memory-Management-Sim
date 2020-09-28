@@ -122,7 +122,7 @@ class DP(Partition): # Dynamic Partition
         super().__init__(maxSize, None)
         self.type = "Dynamic Partition"
 
-    def newPartition(self, size, name):
+    def newPartition(self, name, size):
         for gap in self.gaps:
             if (gap[1] - gap[0]) + 1 >= size:
                 p = Partition(size, gap[0])
