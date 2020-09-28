@@ -119,7 +119,49 @@ def DPmem():
             return
 
 def RDPmem():
-    pass
+    while True:
+        try: 
+            print("How much memory do you want the machine to have: [1-50] [C/c to cancel]")
+            maxMem = input("> ")
+            if maxMem.lower() == "c":
+                return
+            maxMem = int(maxMem)
+            if maxMem < lowerBoundMemory or maxMem > upperBoundMemory:
+                raise ValueError
+            Machine = Memory.RDP(maxMem)
+            jobCounter = 0
+            break
+        except ValueError:
+            print("ERROR: Please input a valid choice")
+    
+    while True:
+        print()
+        Machine.printMemory(freeSymbol,takenSymbol)
+        Machine.printJobs()
+        print("\n[1] Add job")
+        print("[2] Deallocate job")
+        print("[3] Reallocate jobs")
+        print("[4] EXIT")
+
+        option = "0"
+        optionChoices = ["1","2","3","4"]
+        while option not in optionChoices:
+            print("Choose an option")
+            option = input("> ")
+            if option not in optionChoices:
+                print("ERROR: Please pick a valid option")
+        
+        if option == "1":
+            addJob(Machine, "RDP")
+        elif option == "2":
+            if len(Machine.objects) == 0:
+                print("ERROR: No jobs to deallocate")
+            else:
+                deleteJob(Machine, "RDP")
+        elif option == "3":
+            Machine.reallocate()
+        elif option == "4":
+            return
 
 def addJob(mach, partType):
     jobSize = 0
@@ -131,7 +173,7 @@ def addJob(mach, partType):
         jobSize = int(jobSize)
         if partType == "SUC":
             mach.newJob(mach.jobCounter,jobSize)
-        elif partType == "DP":
+        elif partType == "DP" or partType == "RDP":
             mach.newPartition(mach.jobCounter,jobSize)
 
 def deleteJob(mach, partType):
@@ -150,7 +192,7 @@ def deleteJob(mach, partType):
     objOption = int(objOption)
     if partType == "SUC":
         mach.delJob(objOption)
-    elif partType == "DP":
+    elif partType == "DP" or partType == "RDP":
         mach.delPartition(objOption)
         
 MainMenu()
