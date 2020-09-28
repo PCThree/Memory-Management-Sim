@@ -73,8 +73,9 @@ class Partition:
 
     def printJobs(self):
         print("\nJOB LIST:")
+        print("INDEX\tSIZE\tLOCATION")
         for i in range(len(self.objects)):
-            print(f"{i}:\tSize: {self.objects[i].size}\t\t\tLocation: {self.objects[i].startLoc}-{self.objects[i].endLoc}")
+            print(f"{i}:\t{self.objects[i].size}\t{self.objects[i].startLoc}-{self.objects[i].endLoc}")
         print()
     
     def printMemory(self, freeSymbol, takenSymbol):
