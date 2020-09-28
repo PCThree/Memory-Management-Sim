@@ -86,13 +86,14 @@ class Partition:
             elif val is True:
                 print(takenSymbol, end="")
             else:
-                print(" ", end="")
+                print(" [ ", end="")
                 for val2 in val:
-                    if val is False:
+                    if val2 is False:
                         print(freeSymbol, end="")
-                    elif val is True:
+                    elif val2 is True:
                         print(takenSymbol, end="")
-        print(" ]")
+                print(" ] ", end="")
+        print(" ] ")
 
 class SUC(Partition): # Single User Contiguous
     def __init__(self, maxSize):
@@ -148,6 +149,13 @@ class DP(Partition): # Dynamic Partition
         del self.memory[self.objects[index].index]
         del self.objects[index]
         self.gapCheck()
+
+    def printJobs(self):
+        print("\nJOB LIST:")
+        print("INDEX\tSIZE\tLOCATION")
+        for i in range(len(self.objects)):
+            print(f"{i}:\t{self.objects[i].maxSize}\t{self.objects[i].index}")
+        print()
 
 class RDP(DP): # Relocatable Dynamic Partition
     def __init__(self, maxSize):
