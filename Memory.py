@@ -12,6 +12,7 @@ class Partition:
         self.gaps = [[0,self.maxSize]]
         self.size = 0
         self.objects = []
+        self.jobCounter = 0
         self.index = index
 
     """ Broke. alternative way of checking gaps
@@ -61,9 +62,9 @@ class Partition:
                 for i in range(size):
                     del self.memory[gap[0]]
                 self.memory.insert(gap[0],[False for i in range(size)])
-                print(self.memory)
+                #print(self.memory)
                 self.gapCheck()
-                print(self.gaps)
+                #print(self.gaps)
                 return
         print("ERROR: No space available")
 
@@ -74,8 +75,9 @@ class Partition:
                 self.objects.sort(key=lambda x: x.startLoc, reverse=False)
                 for i in range(gap[0],gap[0]+jobSize):
                     self.memory[i] = True
-                print(self.memory)
+                #print(self.memory)
                 self.gapCheck()
+                self.jobCounter += 1
                 return
         print("ERROR: No space available")
 
@@ -84,6 +86,28 @@ class Partition:
             self.memory[i] = False
         del self.objects[index]
         self.gapCheck()
+
+    def printJobs(self):
+        print("\nJOB LIST:")
+        for i in range(len(self.objects)):
+            print(f"{i}:\tSize: {self.objects[i].size}\t\t\tLocation: {self.objects[i].startLoc}-{self.objects[i].endLoc}")
+        print()
+    
+    def printMemory(self, freeSymbol, takenSymbol):
+        print("[ ", end="")
+        for val in self.memory:
+            if val is False:
+                print(freeSymbol, end="")
+            elif val is True:
+                print(takenSymbol, end="")
+            else:
+                print(" ", end="")
+                for val2 in val:
+                    if val is False:
+                        print(freeSymbol, end="")
+                    elif val is True:
+                        print(takenSymbol, end="")
+        print(" ]")
 
 class SUC(Partition): # Single User Contiguous
     def __init__(self, maxSize):
@@ -115,7 +139,7 @@ class FP(Partition): # Fixed Partition
         self.sum = 0
         for obj in self.objects:
             self.sum += obj.maxSize
-        print(f"Max Memory: {self.sum}")
+        #print(f"Max Memory: {self.sum}")
 
 class DP(Partition): # Dynamic Partition
     def __init__(self, maxSize):
