@@ -175,4 +175,4 @@ class Job:
         self.name = name
         self.size = size
         self.startLoc = startLoc
-        self.endLoc = startLoc + size
+        self.endLoc = (startLoc + size) - 1
