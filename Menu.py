@@ -11,9 +11,10 @@ def MainMenu():
         print("[2] Fixed Partition")
         print("[3] Dynamic Partition")
         print("[4] Relocatable Dynamic Partition")
+        print("[5] EXIT")
 
         memChoice = "0"
-        memChoiceOptions = ["1","2","3","4"]
+        memChoiceOptions = ["1","2","3","4","5"]
         while memChoice not in memChoiceOptions:
             memChoice = input("Choose an option: ")
             if memChoice not in memChoiceOptions:
@@ -30,6 +31,8 @@ def MainMenu():
             DPmem()
         elif memChoice == "4":
             RDPmem()
+        elif memChoice == "5":
+            return
 
 def SUCmem():
     while True:
@@ -62,12 +65,14 @@ def SUCmem():
             option = input("> ")
             if option not in optionChoices:
                 print("ERROR: Please pick a valid option")
+                input("press ENTER to continue")
         
         if option == "1":
             addJob(Machine, "SUC")
         elif option == "2":
             if len(Machine.objects) == 0:
                 print("ERROR: No jobs to deallocate")
+                input("press ENTER to continue")
             else:
                 deleteJob(Machine, "SUC")
         elif option == "3":
@@ -200,12 +205,14 @@ def RDPmem():
             option = input("> ")
             if option not in optionChoices:
                 print("ERROR: Please pick a valid option")
+                input("press ENTER to continue")
         
         if option == "1":
             addJob(Machine, "RDP")
         elif option == "2":
             if len(Machine.objects) == 0:
                 print("ERROR: No jobs to deallocate")
+                input("press ENTER to continue")
             else:
                 deleteJob(Machine, "RDP")
         elif option == "3":
@@ -237,7 +244,10 @@ def deleteJob(mach, partType):
     objOptions = []
     objectAmount = 0
     for i in range(len(mach.objects)):
-        objectAmount += len(mach.objects[i].objects)
+        if partType != "SUC":
+            objectAmount += len(mach.objects[i].objects)
+        else:
+            objectAmount += 1
     for i in range(objectAmount):
         objOptions.append(str(i))
     #print(objOptions)
@@ -246,6 +256,7 @@ def deleteJob(mach, partType):
         objOption = input("> ")
         if objOption not in objOptions:
             print("ERROR: Please input a valid option")
+            input("press ENTER to continue")
         elif objOption.lower() == "c":
             return
     objOption = int(objOption)
