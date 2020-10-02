@@ -124,8 +124,12 @@ def FPmem():
         if option == "1": ##########################################
             addJob(Machine, "FP")
         elif option == "2": ###############################################
-            if len(Machine.objects) == 0:
+            jobAmount = 0
+            for obj in Machine.objects:
+                jobAmount += len(obj.objects)
+            if jobAmount == 0:
                 print("ERROR: No jobs to deallocate")
+                input("press ENTER to continue")
             else:
                 deleteJob(Machine, "FP")
         elif option == "3":
